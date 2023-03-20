@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Collection of coaches practice</title>
+	<style>
+		form div {
+			max-width: 400px;
+			margin: 15px auto;
+		}
+		form div input {
+			width: 100%;
+			padding: 5px 10px;
+			border-radius: 3px;
+			border: 1px solid #333;
+			outline: 0;
+		}
+		button {
+			padding: 8px 20px;
+			width: fit-content;
+			display: block;
+			margin: 0 auto;
+			cursor: pointer;
+		}
+		.container {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 15px;
+		}
+	</style>
+</head>
+<body>
+	<h2>Coaches Practice</h2>
+
+	<form class="register">
+
+		<div class="name">
+			<input type="text" name="name" placeholder="name*..." required/>
+		</div>
+		<div class="job">
+			<input type="text" name="jobTitle" placeholder="job title*..." required/>
+		</div>
+		<div class="job-desc">
+			<input type="text" name="jobDesc" placeholder="job description..."/>
+		</div>
+
+		<button>Add new coach</button>
+	</form>
+
+		<section class="coaches-content">
+			<div class="container">
+				<!-- <article class="coach">
+					<h2 class="name"></h2>
+					<span class="job-title"></span>
+					<p class="job-desc"></p>
+				</article> -->
+			</div>
+		</section>
+
+
+	<script src="bundle.js"></script>
+</body>
+</html>
