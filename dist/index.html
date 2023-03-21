@@ -28,6 +28,11 @@
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 			gap: 15px;
+			margin: 20px auto;
+			max-width: 800px;
+		}
+		.coach.updated {
+			background-color: red;
 		}
 	</style>
 </head>
@@ -51,15 +56,21 @@
 
 		<section class="coaches-content">
 			<div class="container">
-				<!-- <article class="coach">
+				<article class="coach">
 					<h2 class="name"></h2>
 					<span class="job-title"></span>
 					<p class="job-desc"></p>
-				</article> -->
+					<button class="approve-btn"></button>
+				</article>
 			</div>
 		</section>
+		<!--  -->
+		<div class="binding">
+			<h1 style="text-align: center;">Not Approved</h1>
+			<div class="container">
+			</div>
+		</div>
 
-
-	<script src="dist/bundle.js"></script>
+		<script src="bundle.js"></script>
 </body>
 </html>

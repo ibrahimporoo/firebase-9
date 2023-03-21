@@ -1,7 +1,9 @@
 import { initializeApp } from 'firebase/app'
 import {
   getFirestore, collection, getDocs,
-	onSnapshot, addDoc
+	onSnapshot, addDoc, doc,
+	query, where,
+	updateDoc
 } from 'firebase/firestore'
 
 const firebaseConfig = {
@@ -22,6 +24,10 @@ const db = getFirestore()
 // collection ref
 const colRef = collection(db, 'coaches')
 
+// queries
+const qCompleted = query(colRef, where("appear", "==", true))
+const qBinding = query(colRef, where("appear", "==", false))
+
 // get real time collection data
 // onSnapshot(colRef, (snapshot) => {
 // 	snapshot.docs.forEach(doc => {
@@ -32,14 +38,28 @@ const colRef = collection(db, 'coaches')
 // })
 
 // get collection data
-let coaches = []
-getDocs(colRef)
+let completedCoaches = []
+getDocs(qCompleted)
   .then(snapshot => {
     // console.log(snapshot.docs)
     snapshot.docs.forEach(doc => {
-      coaches.push({ ...doc.data(), id: doc.id })
+      completedCoaches.push({ ...doc.data(), id: doc.id })
     })
-		fillHTML()
+		fillHTML(completedCoaches, true)
+  })
+  .catch(err => {
+    console.log(err.message)
+  })
+
+// get collection data
+let inCompletedcoaches = [];
+getDocs(qBinding)
+  .then(snapshot => {
+    // console.log(snapshot.docs)
+    snapshot.docs.forEach(doc => {
+      inCompletedcoaches.push({ ...doc.data(), id: doc.id })
+    })
+		fillHTML(inCompletedcoaches, false)
   })
   .catch(err => {
     console.log(err.message)
@@ -59,12 +79,15 @@ registerForm.addEventListener('submit', (e) => {
 	.then( _ => registerForm.reset())
 })
 
+
 let coachesContent = document.querySelector('.coaches-content .container');
-function fillHTML() {
-	let html = ''
+let bindingContent = document.querySelector('.binding .container');
+coachesContent.innerHTML = '';
+bindingContent.innerHTML = '';
+function fillHTML(coaches, completed = true) {
 	coaches.forEach(coach => {
-		if(coach.appear == true) {
-			html += `
+		if(completed) {
+			coachesContent.innerHTML += `
 				<article class="coach">
 					<h2 class="name">${coach.name}</h2>
 					<span class="job-title">${coach.jobTitle}</span>
@@ -72,13 +95,39 @@ function fillHTML() {
 				</article>
 			`
 		} else {
-			console.log("Not True")
+			bindingContent.innerHTML += `
+				<article class="coach">
+					<h2 class="name">${coach.name}</h2>
+					<span class="job-title">${coach.jobTitle}</span>
+					<p class="job-desc">${coach.jobDesc ? coach.jobDesc : "No Description Yet"}</p>
+					<button class="approve-btn" data-id="${coach.id}">Approve</button>
+				</article>
+			`
 		}
 	});
-	coachesContent.innerHTML = html;
+	console.log(coaches)
 }
 
+window.onload = () => {
+	setTimeout(() => {
+		document.querySelectorAll('.approve-btn').forEach(btn => {
+			btn.addEventListener('click', (e) => {
+				// update(e.target.dataset.id)
+				update(e.target)
+			})
+		})
+	}, 200);
+}
 
+// Doc Updating 
+function update(element) {
+	console.log(element)
+	let docRef = doc(db, 'coaches', element.dataset.id)
 
-
-
+  updateDoc(docRef, {
+    appear: true
+  })
+  .then(() => {
+		element.parentElement.classList.add("updated");
+  })
+}
